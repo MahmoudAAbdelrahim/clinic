@@ -16,13 +16,35 @@ import {
   ChevronLeft 
 } from 'lucide-react';
 
+import { Variants } from "framer-motion";
+
+const fadeInUp: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 30,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+    },
+  },
+};
+
 export default function SmartClinicHome() {
   
   // أنميشن مخصص لظهور العناصر بسلاسة عند التمرير
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-  };
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6
+    }
+  }
+};
 
   const staggerContainer = {
     hidden: { opacity: 0 },
