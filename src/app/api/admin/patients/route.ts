@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import User from "../../../../models/User";
 import { connectDB } from "../../../../lib/db";
 import { getCurrentUser } from "../../../../lib/getCurrentUser";
+import MedicalRecord from "../../../../models/MedicalRecord";
 
 export async function GET() {
 
