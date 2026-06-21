@@ -3,12 +3,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+
 interface User {
   _id: string;
   name: string;
   phone: string;
   email: string;
   role: string;
+  createdAt: string;
 }
 
 export default function useAuth() {
