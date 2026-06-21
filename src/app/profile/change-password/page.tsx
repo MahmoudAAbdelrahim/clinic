@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Lock, key, AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
+import { Lock, AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
 
 export default function ChangePassword() {
   const router = useRouter();
