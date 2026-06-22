@@ -65,7 +65,8 @@ export async function POST(req: Request) {
         user._id.toString(),
         user.role
       );
-console.log("TOKEN:", token);
+      
+
     const response =
       NextResponse.json({
         success: true,
@@ -73,20 +74,11 @@ console.log("TOKEN:", token);
         message:
           "تم تسجيل الدخول بنجاح",
       });
-
-    response.cookies.set({
-      name: "token",
-      value: token,
-      httpOnly: true,
-      secure: true,
-      sameSite: "lax",
-      path: "/",
-      maxAge:
-        60 * 60 * 24 * 7,
-    });
-console.log(
-  response.headers.get("set-cookie")
+response.cookies.set(
+  "token",
+  token
 );
+
     return response;
 
   } catch (error) {
