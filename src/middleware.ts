@@ -17,10 +17,10 @@ export function middleware(
   ];
 
   const protectedPages = [
-    "/profile",
     "/patient",
     "/doctor",
     "/admin",
+    "/profile",
   ];
 
   if (
@@ -30,14 +30,9 @@ export function middleware(
         pathname.startsWith(route)
     )
   ) {
-
     return NextResponse.redirect(
-      new URL(
-        "/login",
-        req.url
-      )
+      new URL("/login", req.url)
     );
-
   }
 
   if (token) {
@@ -49,6 +44,7 @@ export function middleware(
           token,
           process.env.JWT_SECRET!
         ) as {
+          userId: string;
           role: string;
         };
 
@@ -60,14 +56,12 @@ export function middleware(
           pathname
         )
       ) {
-
         return NextResponse.redirect(
           new URL(
             "/profile",
             req.url
           )
         );
-
       }
 
       if (
@@ -76,14 +70,9 @@ export function middleware(
         ) &&
         role !== "doctor"
       ) {
-
         return NextResponse.redirect(
-          new URL(
-            "/",
-            req.url
-          )
+          new URL("/", req.url)
         );
-
       }
 
       if (
@@ -92,14 +81,9 @@ export function middleware(
         ) &&
         role !== "admin"
       ) {
-
         return NextResponse.redirect(
-          new URL(
-            "/",
-            req.url
-          )
+          new URL("/", req.url)
         );
-
       }
 
     } catch {
@@ -117,11 +101,19 @@ export function middleware(
       );
 
       return response;
-
     }
-
   }
 
   return NextResponse.next();
-
 }
+
+export const config = {
+  matcher: [
+    "/profile/:path*",
+    "/patient/:path*",
+    "/doctor/:path*",
+    "/admin/:path*",
+    "/login",
+    "/register",
+  ],
+};
