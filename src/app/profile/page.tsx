@@ -15,7 +15,7 @@ import {
 import useAuth from "../../hooks/useAuth";
 
 import axios from "axios";
-import { useState } from "react";
+import { useState , useEffect } from "react";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -51,7 +51,28 @@ const handleLogout = async () => {
 
   }
 };
+const [stats, setStats] =
+useState({
+  appointments: 0,
+  treatments: 0,
+});
 
+useEffect(() => {
+
+  const loadStats =
+  async () => {
+
+    const { data } =
+    await axios.get(
+      "/api/profile/stats"
+    );
+
+    setStats(data);
+  };
+
+  loadStats();
+
+}, []);
 const deleteAccount = async () => {
 
   try {
@@ -187,7 +208,7 @@ const deleteAccount = async () => {
                     </h3>
 
                     <p className="text-2xl font-black text-slate-900 mt-1">
-                      0
+                      {stats.appointments}
                     </p>
                   </div>
 
@@ -197,7 +218,7 @@ const deleteAccount = async () => {
                     </h3>
 
                     <p className="text-2xl font-black text-slate-900 mt-1">
-                      0
+                      {stats.treatments}
                     </p>
                   </div>
 

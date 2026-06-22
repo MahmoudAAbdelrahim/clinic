@@ -73,14 +73,44 @@ const {
     );
   }
 
+const startOfDay = new Date(selectedDate);
+startOfDay.setHours(0, 0, 0, 0);
+
+const endOfDay = new Date(selectedDate);
+endOfDay.setHours(23, 59, 59, 999);
+
 const count =
 await Appointment.countDocuments({
-  appointmentDate:
-    selectedDate,
+  doctorId,
 
-  doctorId:
-    doctorId._id,
+  appointmentDate: {
+    $gte: startOfDay,
+    $lte: endOfDay,
+  },
 });
+
+const existing =
+await Appointment.findOne({
+  userId: currentUser._id,
+  doctorId,
+
+  appointmentDate: {
+    $gte: startOfDay,
+    $lte: endOfDay,
+  },
+});
+
+if (existing) {
+  return NextResponse.json(
+    {
+      message:
+        "لديك حجز بالفعل مع هذا الطبيب في هذا اليوم",
+    },
+    {
+      status: 400,
+    }
+  );
+}
 
   if (count >= 20) {
     return NextResponse.json(

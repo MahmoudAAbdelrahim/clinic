@@ -289,6 +289,58 @@ export default function MedicalFile() {
                 <span>{saveStatus.message}</span>
               </div>
             )}
+
+            <div className="space-y-4 pt-2">
+
+  <h3 className="text-base font-black text-emerald-700 flex items-center gap-2 border-r-4 border-emerald-600 pr-2">
+    التاريخ العائلي والجراحي
+  </h3>
+
+  <div className="flex flex-col gap-1.5">
+
+    <label className="text-sm font-black text-slate-800">
+      العمليات الجراحية السابقة
+    </label>
+
+    <textarea
+      placeholder="اذكر أي عمليات جراحية سابقة وتواريخها إن أمكن..."
+      className="w-full border-2 border-slate-300 p-3.5 rounded-xl bg-slate-50 font-bold text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition"
+      rows={3}
+      value={form.previousOperations || ""}
+      onChange={(e) =>
+        setForm({
+          ...form,
+          previousOperations:
+            e.target.value,
+        })
+      }
+    />
+
+  </div>
+
+  <div className="flex flex-col gap-1.5">
+
+    <label className="text-sm font-black text-slate-800">
+      الأمراض الوراثية بالعائلة
+    </label>
+
+    <textarea
+      placeholder="مثل أمراض القلب، السكر، الضغط، السرطان أو أي أمراض وراثية أخرى..."
+      className="w-full border-2 border-slate-300 p-3.5 rounded-xl bg-slate-50 font-bold text-slate-900 focus:outline-none focus:border-emerald-600 focus:bg-white transition"
+      rows={3}
+      value={form.familyDiseases || ""}
+      onChange={(e) =>
+        setForm({
+          ...form,
+          familyDiseases:
+            e.target.value,
+        })
+      }
+    />
+
+  </div>
+
+</div>
             {/* ------------------------------------------------------------------ */}
 
             {/* زر الحجز والحفظ التفاعلي والأنيق */}

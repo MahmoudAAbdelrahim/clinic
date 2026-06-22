@@ -49,7 +49,7 @@ export default function RegisterPage() {
 
       // توجيه المستخدم بعد ثانية ونصف ليرى رسالة النجاح
       setTimeout(() => {
-        window.location.href = "/patient/dashboard";
+        window.location.href = "/";
       }, 1500);
 
     } catch (error: any) {
