@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import jwt from "jsonwebtoken";
 
-export async function middleware(
+export function middleware(
   req: NextRequest
 ) {
+
   const token =
     req.cookies.get("token")?.value;
 
@@ -16,72 +17,99 @@ export async function middleware(
   ];
 
   const protectedPages = [
+    "/profile",
     "/patient",
     "/doctor",
     "/admin",
   ];
 
-  if (!token && protectedPages.some(
-    route => pathname.startsWith(route)
-  )) {
+  if (
+    !token &&
+    protectedPages.some(
+      route =>
+        pathname.startsWith(route)
+    )
+  ) {
+
     return NextResponse.redirect(
-      new URL("/login", req.url)
+      new URL(
+        "/login",
+        req.url
+      )
     );
+
   }
 
   if (token) {
 
     try {
 
-      const secret = new TextEncoder()
-        .encode(process.env.JWT_SECRET);
-
-      const { payload } =
-        await jwtVerify(
+      const decoded =
+        jwt.verify(
           token,
-          secret
-        );
+          process.env.JWT_SECRET!
+        ) as {
+          role: string;
+        };
 
       const role =
-        payload.role as string;
-
-      // منع الذهاب للوجين أو التسجيل بعد تسجيل الدخول
+        decoded.role;
 
       if (
-        authPages.includes(pathname)
+        authPages.includes(
+          pathname
+        )
       ) {
+
         return NextResponse.redirect(
-          new URL("/profile", req.url)
+          new URL(
+            "/profile",
+            req.url
+          )
         );
+
       }
 
-      // حماية الدكتور
-
       if (
-        pathname.startsWith("/doctor") &&
+        pathname.startsWith(
+          "/doctor"
+        ) &&
         role !== "doctor"
       ) {
+
         return NextResponse.redirect(
-          new URL("/", req.url)
+          new URL(
+            "/",
+            req.url
+          )
         );
+
       }
 
-      // حماية الأدمن
-
       if (
-        pathname.startsWith("/admin") &&
+        pathname.startsWith(
+          "/admin"
+        ) &&
         role !== "admin"
       ) {
+
         return NextResponse.redirect(
-          new URL("/", req.url)
+          new URL(
+            "/",
+            req.url
+          )
         );
+
       }
 
     } catch {
 
       const response =
         NextResponse.redirect(
-          new URL("/login", req.url)
+          new URL(
+            "/login",
+            req.url
+          )
         );
 
       response.cookies.delete(
@@ -89,19 +117,11 @@ export async function middleware(
       );
 
       return response;
+
     }
+
   }
 
   return NextResponse.next();
-}
 
-export const config = {
-  matcher: [
-    "/profile/:path*",
-    "/patient/:path*",
-    "/doctor/:path*",
-    "/admin/:path*",
-    "/login",
-    "/register",
-  ],
-};
+}
