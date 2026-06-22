@@ -48,10 +48,9 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     showToast("success", "تم تسجيل الدخول بنجاح! جاري توجيهك...");
 
-    // ✅ push الأول، refresh بعد التوجيه
     setTimeout(() => {
-      window.location.href = "/";  // بدل router.push — بيعمل hard reload يشيل الكاش
-    }, 800);
+      window.location.href = "/";  // ✅ نفس اللي بيعمله register
+    }, 1500);
 
   } catch (error: any) {
     const errMsg = error?.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول";
