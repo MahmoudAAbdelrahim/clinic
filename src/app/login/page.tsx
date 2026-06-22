@@ -37,29 +37,29 @@ export default function LoginPage() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      setToast({ type: null, message: "" });
+  try {
+    setLoading(true);
+    setToast({ type: null, message: "" });
 
-      const { data } = await axios.post("/api/auth/login", form);
+    await axios.post("/api/auth/login", form);
 
-      showToast("success", "تم تسجيل الدخول بنجاح! جاري توجيهك...");
+    showToast("success", "تم تسجيل الدخول بنجاح! جاري توجيهك...");
 
-      // تأخير بسيط للتوجيه ليشعر المستخدم بسلاسة حركة الـ Toast
+    // ✅ push الأول، refresh بعد التوجيه
+    setTimeout(() => {
+      window.location.href = "/";  // بدل router.push — بيعمل hard reload يشيل الكاش
+    }, 800);
 
-router.refresh();
-router.push("/");
-
-    } catch (error: any) {
-      const errMsg = error?.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة مرة أخرى";
-      showToast("error", errMsg);
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error: any) {
+    const errMsg = error?.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول";
+    showToast("error", errMsg);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-slate-50 flex items-center justify-center px-4 py-12" dir="rtl">
