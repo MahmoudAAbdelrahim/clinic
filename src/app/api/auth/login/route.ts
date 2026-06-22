@@ -65,7 +65,7 @@ export async function POST(req: Request) {
         user._id.toString(),
         user.role
       );
-
+console.log("TOKEN:", token);
     const response =
       NextResponse.json({
         success: true,
@@ -84,7 +84,9 @@ export async function POST(req: Request) {
       maxAge:
         60 * 60 * 24 * 7,
     });
-
+console.log(
+  response.headers.get("set-cookie")
+);
     return response;
 
   } catch (error) {
