@@ -6,41 +6,37 @@ import { connectDB } from "../../../../lib/db";
 import { generateToken } from "../../../../lib/jwt";
 
 export async function POST(req: Request) {
+
   try {
+
     await connectDB();
 
-    const { login, password } =
-      await req.json();
+    const {
+      login,
+      password,
+    } = await req.json();
 
-    if (!login || !password) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "جميع الحقول مطلوبة",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    const user = await User.findOne({
-      $or: [
-        { email: login },
-        { phone: login },
-      ],
-    });
+    const user =
+      await User.findOne({
+        $or: [
+          { email: login },
+          { phone: login },
+        ],
+      });
 
     if (!user) {
+
       return NextResponse.json(
         {
           success: false,
-          message: "البيانات غير صحيحة",
+          message:
+            "البيانات غير صحيحة",
         },
         {
           status: 401,
         }
       );
+
     }
 
     const isMatch =
@@ -50,53 +46,61 @@ export async function POST(req: Request) {
       );
 
     if (!isMatch) {
+
       return NextResponse.json(
         {
           success: false,
-          message: "البيانات غير صحيحة",
+          message:
+            "البيانات غير صحيحة",
         },
         {
           status: 401,
         }
       );
+
     }
 
-    const token = generateToken(
-      user._id.toString(),
-      user.role
-    );
+    const token =
+      generateToken(
+        user._id.toString(),
+        user.role
+      );
 
-    const response = NextResponse.json({
-      success: true,
-      role: user.role,
-      message: "تم تسجيل الدخول بنجاح",
+    const response =
+      NextResponse.json({
+        success: true,
+        role: user.role,
+        message:
+          "تم تسجيل الدخول بنجاح",
+      });
+
+    response.cookies.set({
+      name: "token",
+      value: token,
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge:
+        60 * 60 * 24 * 7,
     });
-
-    response.cookies.set(
-      "token",
-      token,
-      {
-        httpOnly: true,
-        secure:
-          process.env.NODE_ENV ===
-          "production",
-        sameSite: "strict",
-        maxAge: 60 * 60 * 24 * 7,
-        path: "/",
-      }
-    );
 
     return response;
 
-  } catch {
+  } catch (error) {
+
+    console.log(error);
+
     return NextResponse.json(
       {
         success: false,
-        message: "حدث خطأ",
+        message:
+          "حدث خطأ بالخادم",
       },
       {
         status: 500,
       }
     );
+
   }
 }
