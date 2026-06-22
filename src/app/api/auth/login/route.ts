@@ -72,10 +72,12 @@ export async function POST(req: Request) {
       message: "تم تسجيل الدخول بنجاح",
     });
 
+const isProd = process.env.NODE_ENV === "production";
+
 response.cookies.set("token", token, {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",   // ✅ بدل "strict"
+  secure: isProd,
+  sameSite: isProd ? "strict" : "lax",
   maxAge: 60 * 60 * 24 * 7,
   path: "/",
 });
